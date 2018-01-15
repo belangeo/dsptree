@@ -1,0 +1,9 @@
+(load "mathlib")
+
+(let halfpi 3.14159/2)
+(let drive (* (/ 3.14159 2) 10))
+(out (lp (tanh (in 0 1) 
+               drive) 
+         2500))
+
+; end-of-file

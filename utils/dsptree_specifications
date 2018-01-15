@@ -1,0 +1,169 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; DSPTree specifications ;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; - Pure functions vs shared state.
+; - Functions taking a list as an argument apply their process to each
+;   element of the list.
+; - Eager evaluation (function arguments evaluated prior to function body)
+;   vs lazy evaluation (evaluated when needed, as inside an if statement).
+; - Functions are first-class values (can be passed to and returned from
+;   functions).
+; - lambda, map, filter, reduce
+; - Does it make programmers think another way?
+
+;;;;;;;;;;;;
+;; Syntax ;;
+;;;;;;;;;;;;
+
+; Functional programming
+; Prefix notation
+
+;;;;;;;;;;;;;;;;;;
+;; Abstractions ;;
+;;;;;;;;;;;;;;;;;;
+
+(def <funcname> (<arguments>) (
+    <body>
+    <last operation is the output value>
+  )
+)
+
+(def osc (freq) (
+    ;; what is the rate of freq argument? single or multi-rate (dynamic)?
+    (sin (* (* 2 pi) (~ freq)))
+  )
+)
+
+(def ring (input freqmod) (
+    (* input (osc freqmod))
+  )
+)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Variables (persistent state) ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(let varname (
+    <body>
+  )
+)
+
+(buffer bufname size <init>)
+
+; functions are first-class values
+(def delay (input maxsize) (
+    (local blk 1)
+    (buffer mybuf maxsize)
+    (lambda (dtime feed)
+        (let pos (* (phasor (/ sr maxsize)) maxsize))
+        (let val (bufread mybuf (wrap (- pos dtime))))
+        (bufwrite mybuf pos (+ (bufread mybuf pos) (* val feed)))
+        val
+    )
+)
+
+(let mydelay (delay input 44100))
+(mydelay 4410 0.5)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Control Rate and Audio Rate ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; globals
+(global sr 44100)
+(global bs 256)
+(global blk 16)
+
+; The parsing should determine if a code block must be continuously computed or not.
+(def twopi (* 2 pi)) ; computed only at init time
+
+(def lp (in freq) (
+    (const oneOverSr (/ 1 sr)) ; i-rate
+    ;; how to trig k-rate computation only when needed? (ex.: "freq" changed, a flag "changed" in the function struct.)
+    (let coef (exp (/ (* (* -2 pi) freq) sr))) ; k-rate
+    (let sig (+ in (* (- sig[-1] in) coef))) ; a-rate
+    sig ; last statement is the output signal
+  )
+)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Recursive functions ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(def vocoder-voice (in1 in2 freq spread n) (
+    (let cf (* freq (^ n spread)))
+    (let sig (* (follow (bp in1 cf 5) 10) (bp in2 cf 5)))
+    (if (n == 1)
+        sig
+        (+ sig (vocoder-voice in1 in2 freq spread (- n 1))))
+  )
+)
+
+(vocoder-voice s1 s2 80 1.2 32)
+
+;;;;;;;;;;;;;;;;
+;; Namespaces ;;
+;;;;;;;;;;;;;;;;
+
+; global scope
+; module scope
+; function scope
+
+;;;;;;;;;;;;;;;;
+;; Data Types ;;
+;;;;;;;;;;;;;;;;
+
+; number (do we need to distinguish int from float?)
+; string
+; list - backtick expands a list. ex.: (+ `(list 1 2 3 4 5)) ==> 15
+;                                      (+ 1 (list 1 2 3 4 5)) ==> (2 3 4 5 6)
+; function (def, let, map, filter, reduce, global, local, operators, etc.)
+; ugen (osc, phasor, biquad, etc.)
+
+; no boolean, 0 is false, everything else is true
+
+;;;;;;;;;;;;;;;
+;; Operators ;;
+;;;;;;;;;;;;;;;
+
+;; Arithmetic operators
+; + - * / %
+; (- 5) ==> -5 (minus with only one argument is the unary negative)
+
+;; Comparison operators
+; < <= > >= == !=
+
+;; Logic operators
+; ! && ||
+
+;; Bitwise operators
+; << >> & | ~ ^
+
+;;;;;;;;;;;;;;
+;; Examples ;;
+;;;;;;;;;;;;;;
+
+; 1. Simple stereo thru
+
+; (in 0 1) ===> (list `sig from channel 1` `sig from channel 2`)
+(out (in 0 1))
+
+; 2. Stereo hyperbolic tangent distortion + lowpass
+
+(let drive 10)
+(out (lp (tanh (in 0 1) 
+               drive) 
+         2500))
+
+;;;;;;;;;;;;;;;
+;; Structure ;;
+;;;;;;;;;;;;;;;
+
+1. Parser
+  - Pre-processing (load function, macros, etc.)
+  - Tokenizer
+  - Build Abstract Syntax Tree
+  - Analysis and Optimization
+  - Create DSP Internal Representation (linked-list)
+ 
