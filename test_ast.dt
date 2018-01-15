@@ -6,4 +6,6 @@
                drive) 
          2500))
 
+(let x 1.0)
+
 ; end-of-file
