@@ -1,0 +1,10 @@
+; Test-case to see if comments are handled correctly.
+
+(define disto (sig boost) ( ; simple tanh distortion.
+        (tanh (* signal boost))
+    )
+)
+
+(disto (in 0 1) 50)
+
+; end-of-file

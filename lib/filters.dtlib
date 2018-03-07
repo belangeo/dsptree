@@ -1,0 +1,14 @@
+; First-order IIR lowpass filter
+; usage: (lp signal cutoff)
+(define lp (
+        (let coef (exp (/ (* (neg twopi) 100) 44100)))
+        rpole (* sig (- 1 coef)) coef
+    )
+)
+
+; First-order IIR highpass filter
+; usage: (hp signal cutoff)
+(define hp (
+        (- signal (lp signal cutoff))
+    )
+)

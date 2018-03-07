@@ -1,4 +1,5 @@
-(load "mathlib")
+(load "lib/oscils")
+; (load "lib/filters")
 
 (let halfpi 3.14159/2)
 (let drive (* (/ 3.14159 2) 10))

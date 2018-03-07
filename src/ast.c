@@ -72,6 +72,7 @@ void reduce_ast(Node *node) {
     int i;
     switch (node->type) {
         case N_Root:
+        case N_Symbol:
             if (node->count > 0) {
                 for (i=0; i<node->count; i++) {
                     reduce_ast(node->childs[i]);
@@ -99,7 +100,6 @@ void reduce_ast(Node *node) {
         case N_Operator:
         case N_Number:
         case N_String:
-        case N_Symbol:
             break;
     }
 }
@@ -153,7 +153,7 @@ Node * add_node_from_token(Token t, Node *node) {
             break;
         case T_Symbol:
             type = N_Symbol;
-            if (node->type == N_Expr && node->count == 0)
+            if (strstr("*/-+", t.data.string) != NULL)
                 type = N_Operator;
             child = make_node(type);
             strcpy(child->data.string, t.data.string);

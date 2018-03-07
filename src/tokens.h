@@ -3,7 +3,8 @@
 
 #include "types.h"
 
-enum TokenType {T_OpenBrace, T_CloseBrace, T_Number, T_Symbol, T_String, NumTokenType};
+enum TokenType {T_OpenBrace, T_CloseBrace, T_Number, T_Symbol, T_String,
+                NumTokenType};
 
 typedef struct {
     int type;

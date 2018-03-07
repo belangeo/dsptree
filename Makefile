@@ -2,7 +2,7 @@ CC=gcc
 CFLAGS=-c -g -Wall -Isrc
 LDFLAGS=-lm -leditline
 EXECUTABLE=dsptree
-SOURCES=src/numbers.c src/tokens.c src/ast.c src/parser.c dsptree.c
+SOURCES=src/numbers.c src/utils.c src/preproc.c src/tokens.c src/ast.c src/parser.c dsptree.c
 OBJECTS=$(SOURCES:.c=.o)
 
 all: $(SOURCES) $(EXECUTABLE)

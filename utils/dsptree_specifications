@@ -80,7 +80,8 @@
 
 (def lp (in freq) (
     (const oneOverSr (/ 1 sr)) ; i-rate
-    ;; how to trig k-rate computation only when needed? (ex.: "freq" changed, a flag "changed" in the function struct.)
+    ;; how to trig k-rate computation only when needed ? 
+    ;; (ex.: "freq" changed, a flag "changed" in the function struct.)
     (let coef (exp (/ (* (* -2 pi) freq) sr))) ; k-rate
     (let sig (+ in (* (- sig[-1] in) coef))) ; a-rate
     sig ; last statement is the output signal

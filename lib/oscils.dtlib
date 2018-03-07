@@ -1,0 +1,21 @@
+; A sine wave oscillator
+; usage: (osc freq)
+(define osc (
+        sin (* twopi (~ 100))
+    )
+)
+
+; A triangular wave oscillator
+; usage: (tri freq)
+(define tri (
+        (let ph (~ $1))
+        (- (* (min ph (- 1 ph)) 4) 1)
+    )
+)
+
+; A square wave oscillator
+; usage: (square freq)
+(define square (
+        (- (* (< (~ 100) 0.5) 2) 1)
+    )
+)
