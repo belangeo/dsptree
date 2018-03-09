@@ -116,13 +116,14 @@ void print_ast(Node *node, int tab) {
             break;
         case N_Expr:
             if (node->count > 0) {
-                for (i=0; i<node->count; i++) {
+                print_ast(node->childs[0], tab);
+                for (i=1; i<node->count; i++) {
                     print_ast(node->childs[i], tab+4);
                 }
             }
             break;
         case N_Operator:
-            printf("%*s%s\n", tab-4, "", node->data.string);
+            printf("%*s%s\n", tab, "", node->data.string);
             break;
         case N_Number:
             printf("%*s%f\n", tab, "", node->data.number);

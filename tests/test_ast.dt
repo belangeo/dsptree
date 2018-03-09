@@ -1,10 +1,12 @@
 (load "lib/oscils")
-; (load "lib/filters")
+(load "lib/filters")
 
 (let halfpi 3.14159/2)
 (let drive (* (/ 3.14159 2) 10))
 (out (lp (tanh (in 0) 
                drive) 
          2500))
+
+(pow (* 1 2) (/ 6 3))
 
 ; end-of-file

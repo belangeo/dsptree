@@ -6,7 +6,7 @@
 
 static char * 
 load_libs(char *input) {
-    int i, ok, pos, commented, psize, size = 0, which = 0;
+    int i, ok, pos, commented, psize, size = 0, which = 0, loaded = 0;
     char filename[64];
     char *ptr, *content, *buffer;
     char *next = input;
@@ -60,12 +60,13 @@ load_libs(char *input) {
             size += psize;
 
             free(content);
+            loaded = 1;
         }
 
         ptr = strstr(ptr, "(load ");
     }
 
-    if (next != input) {
+    if (next != input && loaded == 0) {
         next += 2;
         psize = strlen(next);
         buffer = (char *)realloc(buffer, sizeof(char) * (size + psize + 1));
