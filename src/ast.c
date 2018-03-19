@@ -10,8 +10,10 @@ delete_node(Node *node) {
     for (i=0; i<node->count; i++) {
         delete_node(node->childs[i]);
     }
-    if (node != NULL)
+    if (node != NULL) {
+        free(node->childs);
         free(node);
+    }
 }
 
 Node *

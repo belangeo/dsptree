@@ -21,7 +21,7 @@ void get_token(char *str, char **start, char **end) {
         str += strcspn(str, endofline) + 1;
 
     /* All bytes consumed. */
-    if (str[0] == '\0') {
+    if (str[-1] == '\0') {
         *start = *end = NULL;
         return;
     }

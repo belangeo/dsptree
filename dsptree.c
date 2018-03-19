@@ -11,7 +11,7 @@
 #endif
 
 int main(int argc, char **argv) {
-    char *input=NULL, *preproc=NULL;
+    char *input=NULL;
 
     dsptree_print_level = 0;
 
@@ -24,12 +24,12 @@ int main(int argc, char **argv) {
     }
 
     if (input) {
-        preproc = process(input);
-        parse(preproc);
+        input = process(input);
+        parse(input);
         free(input);
-        free(preproc);
     }
 
+/*
     while ((input = readline("> ")) != NULL) {
         add_history(input);
         preproc = process(input);
@@ -37,6 +37,6 @@ int main(int argc, char **argv) {
         free(input);
         free(preproc);
     }
-
+*/
     return 0;
 }

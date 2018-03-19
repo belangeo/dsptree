@@ -1,0 +1,6 @@
+(load "lib/oscils")
+( macro  SR     44100 )
+;(   macro FREQ 440 )
+(macro HALFPI (/ pi 2))
+
+(let coeff (pow e (/ (* (* -2 HALFPI) FREQ) SR)))

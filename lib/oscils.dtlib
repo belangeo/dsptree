@@ -1,13 +1,16 @@
+(macro pi 3.14159)
+
 ; A sine wave oscillator
 ; usage: (osc freq)
-(define osc (
-        sin (* twopi (~ 100))
+(
+define osc (
+        sin (* (* 2 pi) (~ 100))
     )
 )
 
 ; A triangular wave oscillator
 ; usage: (tri freq)
-(define tri (
+(define tri      (
         (let ph (~ $1))
         (- (* (min ph (- 1 ph)) 4) 1)
     )
